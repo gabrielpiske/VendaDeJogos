@@ -54,4 +54,16 @@ public class UsuarioDao {
             JOptionPane.showConfirmDialog(null, "Erro: " + e);
         }
     }
+    
+    public void alterarUsuario(int codigo, String password){
+        String sql = "UPDATE usuario SET senha = ? WHERE id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setString(1, password);
+            ps.setInt(2, codigo);
+            ps.execute();
+            ps.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+    }
 }

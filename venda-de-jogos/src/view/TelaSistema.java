@@ -6,7 +6,7 @@ package view;
 
 /**
  *
- * @author User
+ * @author gabriel_piske
  */
 public class TelaSistema extends javax.swing.JFrame {
 
