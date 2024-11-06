@@ -120,7 +120,15 @@ public class TelaSistema extends javax.swing.JFrame {
             new String [] {
                 "Nome", "Descriçao", "Preço", "Lançamento", "Classificação", "Imagem"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jtblJogos);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
