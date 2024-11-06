@@ -10,4 +10,13 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-select * from usuario;
+CREATE TABLE `jogo` (
+  `idjogo` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `preco` double NOT NULL,
+  `dataLancamento` varchar(45) NOT NULL,
+  `classificacaoIndicativa` int NOT NULL,
+  `imagem` longblob,
+  PRIMARY KEY (`idjogo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
