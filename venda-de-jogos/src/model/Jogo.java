@@ -5,6 +5,7 @@ package model;
  * @author gabriel_piske
  */
 public class Jogo {
+    int idJogo;
     String nome, descricao, dataLancamento, classificacaoIndicativa;
     Double preco;
     byte[] imagem;
@@ -12,6 +13,16 @@ public class Jogo {
     public Jogo(){
     }
 
+    public Jogo(int idJogo, String nome, String descricao, String dataLancamento, String classificacaoIndicativa, Double preco, byte[] imagem) {
+        this.idJogo = idJogo;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.dataLancamento = dataLancamento;
+        this.classificacaoIndicativa = classificacaoIndicativa;
+        this.preco = preco;
+        this.imagem = imagem;
+    }
+    
     public Jogo(String nome, String descricao, String dataLancamento, String classificacaoIndicativa, Double preco, byte[] imagem) {
         this.nome = nome;
         this.descricao = descricao;
@@ -19,6 +30,14 @@ public class Jogo {
         this.classificacaoIndicativa = classificacaoIndicativa;
         this.preco = preco;
         this.imagem = imagem;
+    }
+
+    public int getIdJogo() {
+        return idJogo;
+    }
+
+    public void setIdJogo(int idJogo) {
+        this.idJogo = idJogo;
     }
 
     public String getNome() {
@@ -69,5 +88,15 @@ public class Jogo {
         this.imagem = imagem;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Jogo{" +
+                "idJogo=" + idJogo +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", dataLancamento='" + dataLancamento + '\'' +
+                ", classificacaoIndicativa='" + classificacaoIndicativa + '\'' +
+                ", preco=" + preco +
+                '}';
+    }
 }

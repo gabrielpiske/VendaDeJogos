@@ -20,3 +20,17 @@ CREATE TABLE `jogo` (
   `imagem` longblob,
   PRIMARY KEY (`idjogo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `carrinho` (
+  `idcarrinho` INT NOT NULL AUTO_INCREMENT,
+  `valorTotal` DOUBLE NOT NULL,
+  PRIMARY KEY (`idcarrinho`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `carrinho_jogo` (
+  `idcarrinho` INT NOT NULL,
+  `idjogo` INT NOT NULL,
+  PRIMARY KEY (`idcarrinho`, `idjogo`),
+  FOREIGN KEY (`idcarrinho`) REFERENCES `carrinho` (`idcarrinho`) ON DELETE CASCADE,
+  FOREIGN KEY (`idjogo`) REFERENCES `jogo` (`idjogo`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

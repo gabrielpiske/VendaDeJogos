@@ -56,6 +56,7 @@ public class TelaLogin extends javax.swing.JFrame {
         jbtnCadUseer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tela Login");
 
         jLabel1.setFont(new java.awt.Font("JetBrains Mono", 0, 24)); // NOI18N
         jLabel1.setText("Tela de Login");
@@ -137,7 +138,7 @@ public class TelaLogin extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(104, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(103, 103, 103))
         );
