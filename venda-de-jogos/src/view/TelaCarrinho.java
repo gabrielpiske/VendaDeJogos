@@ -4,6 +4,19 @@
  */
 package view;
 
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import model.Carrinho;
+import model.Jogo;
+
 /**
  *
  * @author gabriel_piske
@@ -13,10 +26,67 @@ public class TelaCarrinho extends javax.swing.JFrame {
     /**
      * Creates new form TelaCarrinho
      */
-    public TelaCarrinho() {
+    private List<Jogo> carrinho;
+
+    public TelaCarrinho(List<Jogo> carrinho) {
         initComponents();
-        
+
+        this.carrinho = carrinho;
+        jtxtValorTotal.setText(calcularValorTotal().toString());;
+        jlbVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jtxtValorTotal.setEnabled(false);
+
         setTitle("Carrinho - Venda de Jogos");
+        jtblJogos.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = new JLabel();
+
+                if (value instanceof ImageIcon) {
+                    ImageIcon icon = (ImageIcon) value;
+
+                    // Redimensiona a imagem
+                    int width = 100;
+                    int height = 100;
+
+                    Image img = icon.getImage();
+                    Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                    label.setIcon(new ImageIcon(newImg));
+
+                    table.setRowHeight(row, height);
+                }
+
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+    }
+
+    public void carregarCarrinhoNaTela() {
+        DefaultTableModel modeloTabela = (DefaultTableModel) jtblJogos.getModel();
+        modeloTabela.setRowCount(0);  // Limpa a tabela antes de adicionar os novos jogos
+
+        // Supondo que carrinhoAtual já tenha os jogos carregados, ou use o carrinho do banco de dados
+        for (Jogo jogo : carrinho) {
+            // Adiciona os dados do jogo na tabela
+            Object[] novaLinha = {
+                jogo.getNome(),
+                jogo.getDescricao(),
+                jogo.getPreco(),
+                jogo.getDataLancamento(),
+                jogo.getClassificacaoIndicativa(),
+                jogo.getImagem() // Ou você pode transformar a imagem em um ícone para exibir na tabela
+            };
+            modeloTabela.addRow(novaLinha);
+        }
+    }
+
+    private Double calcularValorTotal() {
+        double total = 0;
+        for (Jogo jogo : carrinho) {
+            total += jogo.getPreco();
+        }
+        return total;
     }
 
     /**
@@ -29,26 +99,100 @@ public class TelaCarrinho extends javax.swing.JFrame {
     private void initComponents() {
 
         jRadioButton1 = new javax.swing.JRadioButton();
+        jblCarrinho = new javax.swing.JLabel();
+        scrlPane = new javax.swing.JScrollPane();
+        jtblJogos = new javax.swing.JTable();
+        jblValorTotal = new javax.swing.JLabel();
+        jtxtValorTotal = new javax.swing.JTextField();
+        jbtnFinalizar = new javax.swing.JButton();
+        jlbVoltar = new javax.swing.JLabel();
 
         jRadioButton1.setText("jRadioButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Carrinho");
 
+        jblCarrinho.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jblCarrinho.setText("Carrinho");
+
+        jtblJogos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Nome", "Descrição", "Preço", "Lançamento", "Classificação", "Imagem"
+            }
+        ));
+        scrlPane.setViewportView(jtblJogos);
+
+        jblValorTotal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jblValorTotal.setText("Valor Total: ");
+
+        jbtnFinalizar.setText("Finalizar Compra");
+
+        jlbVoltar.setText("Voltar");
+        jlbVoltar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jlbVoltar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlbVoltarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 603, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(scrlPane, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jblValorTotal)
+                                .addGap(18, 18, 18)
+                                .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jlbVoltar)
+                                .addGap(207, 207, 207)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jblCarrinho)
+                            .addComponent(jbtnFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jblCarrinho)
+                    .addComponent(jlbVoltar))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jblValorTotal)
+                    .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnFinalizar))
+                .addGap(18, 18, 18)
+                .addComponent(scrlPane, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jlbVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlbVoltarMouseClicked
+        dispose();
+        TelaSistema sistema = new TelaSistema();
+        sistema.setVisible(true);
+    }//GEN-LAST:event_jlbVoltarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -80,12 +224,20 @@ public class TelaCarrinho extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCarrinho().setVisible(true);
+                List<Jogo> listaJogos = new ArrayList<>();
+                new TelaCarrinho(listaJogos).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JLabel jblCarrinho;
+    private javax.swing.JLabel jblValorTotal;
+    private javax.swing.JButton jbtnFinalizar;
+    private javax.swing.JLabel jlbVoltar;
+    private javax.swing.JTable jtblJogos;
+    private javax.swing.JTextField jtxtValorTotal;
+    private javax.swing.JScrollPane scrlPane;
     // End of variables declaration//GEN-END:variables
 }

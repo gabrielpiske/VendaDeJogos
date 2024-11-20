@@ -22,22 +22,32 @@ public class JogoDao {
         this.con = new ConexaoBanco().getConnection();
     }
 
-    public void cadJogo(Jogo jogo) throws SQLException {
-        String sql = "INSERT INTO jogo (nome, descricao, preco, dataLancamento, classificacaoIndicativa, imagem) values (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, jogo.getNome());
-            ps.setString(2, jogo.getDescricao());
-            ps.setDouble(3, jogo.getPreco());
-            ps.setString(4, jogo.getDataLancamento());
-            ps.setString(5, jogo.getClassificacaoIndicativa());
-            ps.setBytes(6, jogo.getImagem());
+    public int cadJogo(Jogo jogo) {
+        String sql = "INSERT INTO jogo (nome, descricao, preco, datalancamento, classificacaoindicativa, imagem) VALUES (?, ?, ?, ?, ?, ?)";
+        int idGerado = -1;
 
-            ps.execute();
-            ps.close();
-            JOptionPane.showMessageDialog(null, "Jogo Cadastrado com Sucesso!");
+        try (Connection conn = new ConexaoBanco().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, jogo.getNome());
+            stmt.setString(2, jogo.getDescricao());
+            stmt.setDouble(3, jogo.getPreco());
+            stmt.setString(4, jogo.getDataLancamento());
+            stmt.setString(5, jogo.getClassificacaoIndicativa());
+            stmt.setBytes(6, jogo.getImagem());
+
+            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idGerado = rs.getInt(1); // ID gerado pelo banco
+                    jogo.setIdJogo(idGerado);   // Atualiza o ID no objeto
+                }
+            }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o jogo: " + e.getMessage());
+            throw new RuntimeException("Erro ao salvar o jogo: " + e.getMessage(), e);
         }
+
+        return idGerado;
     }
 
     public void listJogos(DefaultTableModel model) {
@@ -46,7 +56,6 @@ public class JogoDao {
         try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             //model.setRowCount(0);
-
             while (rs.next()) {
                 Object[] row = new Object[6];
 
@@ -64,12 +73,37 @@ public class JogoDao {
                 } else {
                     row[5] = null;
                 }
-                
+
                 // Adiciona a linha à tabela
                 model.addRow(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Jogo buscarJogoPorNome(String nome) throws SQLException {
+        String sql = "SELECT * FROM jogo WHERE nome = ?";
+        Jogo jogo = null;
+
+        try (Connection conn = new ConexaoBanco().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    jogo = new Jogo();
+                    jogo.setIdJogo(rs.getInt("idjogo"));
+                    jogo.setNome(rs.getString("nome"));
+                    jogo.setDescricao(rs.getString("descricao"));
+                    jogo.setPreco(rs.getDouble("preco"));
+                    jogo.setDataLancamento(rs.getString("datalancamento"));
+                    jogo.setClassificacaoIndicativa(rs.getString("classificacaoindicativa"));
+                    jogo.setImagem(rs.getBytes("imagem"));
+                }
+            }
+        }
+
+        return jogo;
     }
 }

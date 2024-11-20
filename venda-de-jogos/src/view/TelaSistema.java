@@ -1,7 +1,9 @@
 package view;
 
+import dao.CarrinhoDao;
 import dao.JogoDao;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -14,12 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import model.Jogo;
 import javax.swing.*;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.Carrinho;
+import view.TelaCarrinho;
 
 /**
  *
@@ -28,6 +33,9 @@ import javax.swing.table.DefaultTableModel;
 public class TelaSistema extends javax.swing.JFrame {
 
     public List<Jogo> carrinho = new ArrayList<>();
+    private Carrinho carrinhoAtual = new Carrinho(); // Carrinho ativo na interface
+    private CarrinhoDao carrinhoDao = new CarrinhoDao(); // DAO do carrinho
+    private TelaCarrinho telaCarrinho = new TelaCarrinho(new ArrayList<Jogo>());
 
     /**
      * Creates new form TelaSistema
@@ -37,6 +45,7 @@ public class TelaSistema extends javax.swing.JFrame {
         //setSize(600, 400);
         setTitle("Tela Principal - Venda de Jogos");
         txtImagem.setEnabled(false);
+        imageCart.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         jtblJogos.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -61,6 +70,8 @@ public class TelaSistema extends javax.swing.JFrame {
                 return label;
             }
         });
+
+        carregarJogos();
 
     }
 
@@ -175,8 +186,7 @@ public class TelaSistema extends javax.swing.JFrame {
         });
 
         imageCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Image/cart.png"))); // NOI18N
-        imageCart.setText("jLabel7");
-        imageCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        imageCart.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         imageCart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 imageCartMouseClicked(evt);
@@ -346,9 +356,9 @@ public class TelaSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void imageCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageCartMouseClicked
-        dispose();
-        TelaCarrinho telaCarrinho = new TelaCarrinho();
+        TelaCarrinho telaCarrinho = new TelaCarrinho(carrinhoAtual.getListaJogos());
         telaCarrinho.setVisible(true);
+        dispose(); // Fecha a tela atual
     }//GEN-LAST:event_imageCartMouseClicked
 
     private void addCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCarrinhoActionPerformed
@@ -359,6 +369,7 @@ public class TelaSistema extends javax.swing.JFrame {
             return;
         }
 
+        // Recupera os dados da tabela
         String nome = (String) jtblJogos.getValueAt(selectRow, 0);
         String descricao = (String) jtblJogos.getValueAt(selectRow, 1);
         double preco = (double) jtblJogos.getValueAt(selectRow, 2);
@@ -366,35 +377,68 @@ public class TelaSistema extends javax.swing.JFrame {
         String classificacao = (String) jtblJogos.getValueAt(selectRow, 4);
         ImageIcon imagemIcon = (ImageIcon) jtblJogos.getValueAt(selectRow, 5);
 
-        Jogo jogo = new Jogo();
+        JogoDao jogoDao = new JogoDao();
+        Jogo jogo;
 
-        jogo.setNome(nome);
-        jogo.setDescricao(descricao);
-        jogo.setPreco(preco);
-        jogo.setDataLancamento(dataLancamento);
-        jogo.setClassificacaoIndicativa(classificacao);
-        if (imagemIcon != null) {
-            Image image = new ImageIcon().getImage();
-            jogo.setImagem(imageToByteArray(image));
+        try {
+            // Busca o jogo no banco pelo nome (ou outro identificador único da tabela)
+            jogo = jogoDao.buscarJogoPorNome(nome);
+
+            if (jogo == null) {
+                JOptionPane.showMessageDialog(this, "Jogo não encontrado no banco de dados.");
+                return;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao buscar jogo no banco: " + ex.getMessage());
+            return;
         }
 
-        //carrinho.add(jogo);
-        JOptionPane.showMessageDialog(this, "Jogo adicionada com sucesso");
+        // Processa a imagem se disponível
+        if (imagemIcon != null && imagemIcon.getImage() != null) {
+            byte[] imagemBytes = imageToByteArray(imagemIcon.getImage());
+            if (imagemBytes != null) {
+                jogo.setImagem(imagemBytes);
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao processar a imagem. Jogo será adicionado sem imagem.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Jogo adicionado sem imagem, pois não foi encontrada uma imagem válida.");
+        }
+
+        // Adiciona o jogo ao carrinho
+        carrinhoAtual.getListaJogos().add(jogo);
+        carrinhoAtual.setValorTotal(carrinhoAtual.getValorTotal() + preco);
+
+        try {
+            carrinhoDao.cadCarrinho(carrinhoAtual); // Atualiza o carrinho no banco
+            JOptionPane.showMessageDialog(this, "Jogo adicionado ao carrinho com sucesso!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar o carrinho: " + ex.getMessage());
+        }
+
+        telaCarrinho.carregarCarrinhoNaTela(); // Atualiza a exibição
     }//GEN-LAST:event_addCarrinhoActionPerformed
 
     private byte[] imageToByteArray(Image image) {
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIcon icon = new ImageIcon(image);
-            Image img = icon.getImage();
+            // Criação de um BufferedImage a partir da Image
+            BufferedImage bufferedImage = new BufferedImage(
+                    image.getWidth(null),
+                    image.getHeight(null),
+                    BufferedImage.TYPE_INT_ARGB
+            );
 
-            // cria bufferead
-            BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = bufferedImage.createGraphics();
-            g2.drawImage(img, 0, 0, null);
+            g2.drawImage(image, 0, 0, null);
             g2.dispose();
 
+            // Converte BufferedImage para byte[]
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            return baos.toByteArray();
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -10,7 +10,7 @@ import java.sql.*;
 public class ConexaoBanco {
     public Connection getConnection(){
         try {
-            return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/vendajogos", "root", "senai");
+            return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/vendajogos", "root", "");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro na conexao com banco: " + e.getMessage());
             return null;

@@ -35,16 +35,17 @@ public class CarrinhoDao {
                 psCarrinho.setDouble(1, carrinho.getValorTotal());
                 psCarrinho.executeUpdate();
 
-                // recupera o id criado do carrinho
+                // Recupera o id do carrinho recém-criado
                 try (ResultSet generatedKeys = psCarrinho.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int idCarrinho = generatedKeys.getInt(1);
 
-                        // cadastro de jogos
+                        // Inserção dos jogos associados ao carrinho
                         try (PreparedStatement psCarrinhoJogo = con.prepareStatement(sqlCarrinhoJogo)) {
                             for (Jogo jogo : carrinho.getListaJogos()) {
                                 psCarrinhoJogo.setInt(1, idCarrinho);
                                 psCarrinhoJogo.setInt(2, jogo.getIdJogo());
+                                psCarrinhoJogo.executeUpdate();
                             }
                         }
                     } else {
@@ -53,11 +54,12 @@ public class CarrinhoDao {
                 }
             }
 
-            con.commit(); // confirma
+            con.commit();  // Confirma a transação
             JOptionPane.showMessageDialog(null, "Carrinho cadastrado com sucesso");
         } catch (SQLException e) {
-            con.rollback();
+            con.rollback();  // Desfaz a transação em caso de erro
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o carrinho: " + e.getMessage());
+            System.out.println("erro: " + e.getMessage());
         }
     }
 
@@ -80,11 +82,10 @@ public class CarrinhoDao {
             }
 
             if (carrinho != null) {
-                // Busca os jogos do carrinho
+
                 try (PreparedStatement psJogos = con.prepareStatement(sqlJogos)) {
                     psJogos.setInt(1, idCarrinho);
                     try (ResultSet rsJogos = psJogos.executeQuery()) {
-                        List<Jogo> listaJogos = new ArrayList<>();
                         while (rsJogos.next()) {
                             Jogo jogo = new Jogo();
                             jogo.setIdJogo(rsJogos.getInt("idjogo"));
@@ -94,9 +95,8 @@ public class CarrinhoDao {
                             jogo.setDataLancamento(rsJogos.getString("dataLancamento"));
                             jogo.setClassificacaoIndicativa(rsJogos.getString("classificacaoIndicativa"));
                             jogo.setImagem(rsJogos.getBytes("imagem"));
-                            listaJogos.add(jogo);
+                            carrinho.addJogo(jogo);  // Adiciona o jogo à lista
                         }
-                        carrinho.setListaJogos(listaJogos);
                     }
                 }
             }

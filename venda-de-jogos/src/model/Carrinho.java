@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,11 +8,15 @@ import java.util.List;
  * @author gabriel_piske
  */
 public class Carrinho {
+
     int idCarrinho;
     List<Jogo> listaJogos;
     Double valorTotal;
-    
-    public Carrinho(){}
+
+    public Carrinho() {
+        this.listaJogos = new ArrayList<>();
+        this.valorTotal = 0.0;
+    }
 
     public Carrinho(int idCarrinho, List<Jogo> listaJogos, Double valorTotal) {
         this.idCarrinho = idCarrinho;
@@ -42,14 +47,12 @@ public class Carrinho {
     public void setIdCarrinho(int idCarrinho) {
         this.idCarrinho = idCarrinho;
     }
-    
-    @Override
-    public String toString() {
-        return "Carrinho{" +
-                "idCarrinho=" + idCarrinho +
-                ", listaJogos=" + listaJogos +
-                ", valorTotal=" + valorTotal +
-                '}';
+
+    public void addJogo(Jogo jogo) {
+        if (this.listaJogos == null) {
+            this.listaJogos = new ArrayList<>();
+        }
+        this.listaJogos.add(jogo);
     }
 
 }
