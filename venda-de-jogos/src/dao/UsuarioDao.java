@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.Usuario;
+import view.TelaSistema;
 
 /**
  *
@@ -33,6 +34,7 @@ public class UsuarioDao {
                     usuario = new Usuario();
                     usuario.setNome(rs.getString("nome"));
                     usuario.setSenha(rs.getString("senha"));
+                    TelaSistema.idUsuario = rs.getInt("id");
                 }
             }
         } catch (SQLException e) {

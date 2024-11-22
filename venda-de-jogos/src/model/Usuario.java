@@ -7,6 +7,7 @@ import java.util.Date;
  * @author gabriel_piske
  */
 public class Usuario {
+    int id;
     String nome, cpf, email, sexo, senha;
     Date dataNascimento;
 
@@ -74,6 +75,13 @@ public class Usuario {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
 }

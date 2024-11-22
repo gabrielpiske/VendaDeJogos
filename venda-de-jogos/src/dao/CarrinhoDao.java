@@ -3,6 +3,7 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Carrinho;
 import model.Jogo;
 
 /**
@@ -19,14 +20,16 @@ public class CarrinhoDao {
         this.con = new ConexaoBanco().getConnection();
     }
 
-    public void addJogoAoCarrinho(int idCarrinho, int idJogo) {
-        String sql = "INSERT INTO carrinho_jogo (idcarrinho, idjogo) VALUES (?, ?)";
+    public void addJogoAoCarrinho(Carrinho carrinho) {
+        String sql = "INSERT INTO carrinho (usuario_id, jogo_idjogo, valorTotal) VALUES (?, ?, ?)";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            System.out.println("ID Carrinho: " + idCarrinho + ", ID Jogo: " + idJogo);
-            stmt.setInt(1, idCarrinho);
-            stmt.setInt(2, idJogo);
-            stmt.executeUpdate();
+            for (int i = 0; i < carrinho.getListaJogos().size(); i++) {
+                stmt.setInt(1, carrinho.getUsuario_id());
+                stmt.setInt(2, carrinho.getListaJogos().get(i));
+                stmt.setDouble(3, Double.parseDouble(carrinho.getValorTotal().get(i) + ""));
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao adicionar jogo ao carrinho: " + e.getMessage(), e);
         }

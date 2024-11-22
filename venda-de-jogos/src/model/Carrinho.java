@@ -9,50 +9,40 @@ import java.util.List;
  */
 public class Carrinho {
 
-    int idCarrinho;
-    List<Jogo> listaJogos;
-    Double valorTotal;
+    int usuario_id;
+    List<Integer> listaJogos;
+    List<Double> valorTotal;
 
-    public Carrinho() {
-        this.listaJogos = new ArrayList<>();
-        this.valorTotal = 0.0;
-    }
-
-    public Carrinho(int idCarrinho, List<Jogo> listaJogos, Double valorTotal) {
-        this.idCarrinho = idCarrinho;
+    public Carrinho(int usuario_id, List<Integer> listaJogos, List<Double> valorTotal) {
+        this.usuario_id = usuario_id;
         this.listaJogos = listaJogos;
         this.valorTotal = valorTotal;
     }
 
-    public List<Jogo> getListaJogos() {
+    
+
+    public int getUsuario_id() {
+        return usuario_id;
+    }
+
+    public void setUsuario_id(int usuario_id) {
+        this.usuario_id = usuario_id;
+    }
+
+    public List<Integer> getListaJogos() {
         return listaJogos;
     }
 
-    public void setListaJogos(List<Jogo> listaJogos) {
+    public void setListaJogos(List<Integer> listaJogos) {
         this.listaJogos = listaJogos;
     }
 
-    public Double getValorTotal() {
+    public List<Double> getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(List<Double> valorTotal) {
         this.valorTotal = valorTotal;
-    }
-
-    public int getIdCarrinho() {
-        return idCarrinho;
-    }
-
-    public void setIdCarrinho(int idCarrinho) {
-        this.idCarrinho = idCarrinho;
-    }
-
-    public void addJogo(Jogo jogo) {
-        if (this.listaJogos == null) {
-            this.listaJogos = new ArrayList<>();
-        }
-        this.listaJogos.add(jogo);
     }
 
 }

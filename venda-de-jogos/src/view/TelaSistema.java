@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Carrinho;
+import model.Usuario;
 import view.TelaCarrinho;
 
 /**
@@ -32,10 +33,11 @@ import view.TelaCarrinho;
  */
 public class TelaSistema extends javax.swing.JFrame {
 
-    public List<Jogo> carrinho = new ArrayList<>();
-    private Carrinho carrinhoAtual = new Carrinho(); // Carrinho ativo na interface
     private CarrinhoDao carrinhoDao = new CarrinhoDao(); // DAO do carrinho
     private TelaCarrinho telaCarrinho;
+    
+    
+    public static int idUsuario;
 
     /**
      * Creates new form TelaSistema
@@ -47,7 +49,7 @@ public class TelaSistema extends javax.swing.JFrame {
         txtImagem.setEnabled(false);
         imageCart.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        jtblJogos.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+        jtblJogos.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 JLabel label = new JLabel();
@@ -122,30 +124,30 @@ public class TelaSistema extends javax.swing.JFrame {
 
         jtblJogos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nome", "Descriçao", "Preço", "Lançamento", "Classificação", "Imagem"
+                "Id", "Nome", "Descriçao", "Preço", "Lançamento", "Classificação", "Imagem"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                true, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -374,19 +376,19 @@ public class TelaSistema extends javax.swing.JFrame {
 
         // Obtém o modelo da tabela
         DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-        int idJogo = Integer.parseInt(model.getValueAt(selectedRow, 0).toString()); // Supondo que a primeira coluna seja o ID do jogo
 
-        // Cria um novo carrinho e obtém o ID gerado
+        int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+        
+        List<Integer> listaJogos = new ArrayList<>();
+        listaJogos.add(id);
+        
+        List<Double> valorTotal = new ArrayList<>();
+        valorTotal.add(Double.parseDouble(model.getValueAt(selectedRow, 3) + ""));
+        
+                
         CarrinhoDao carrinhoDao = new CarrinhoDao();
-        int idCarrinho = carrinhoDao.criarNovoCarrinho(); // Novo carrinho
-
-        // Adiciona o jogo ao carrinho no banco de dados
-        try {
-            carrinhoDao.addJogoAoCarrinho(idCarrinho, idJogo);
-            JOptionPane.showMessageDialog(this, "Jogo adicionado ao carrinho! ID do Carrinho: " + idCarrinho);
-        } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao adicionar jogo ao carrinho: " + e.getMessage());
-        }
+        Carrinho carrinho = new Carrinho(idUsuario, listaJogos, valorTotal);
+        carrinhoDao.addJogoAoCarrinho(carrinho);
     }
 
     private byte[] imageToByteArray(Image image) {

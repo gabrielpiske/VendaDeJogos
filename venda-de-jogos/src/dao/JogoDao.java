@@ -57,21 +57,22 @@ public class JogoDao {
 
             //model.setRowCount(0);
             while (rs.next()) {
-                Object[] row = new Object[6];
-
-                row[0] = rs.getString("nome");
-                row[1] = rs.getString("descricao");
-                row[2] = rs.getDouble("preco");
-                row[3] = rs.getString("dataLancamento");
-                row[4] = rs.getString("classificacaoIndicativa");
+                Object[] row = new Object[7];
+                
+                row[0] = rs.getInt("idjogo");
+                row[1] = rs.getString("nome");
+                row[2] = rs.getString("descricao");
+                row[3] = rs.getDouble("preco");
+                row[4] = rs.getString("dataLancamento");
+                row[5] = rs.getString("classificacaoIndicativa");
 
                 // Converte a imagem do banco para ImageIcon
                 byte[] imgBytes = rs.getBytes("imagem");
                 if (imgBytes != null) {
                     ImageIcon imageIcon = new ImageIcon(imgBytes);
-                    row[5] = imageIcon;
+                    row[6] = imageIcon;
                 } else {
-                    row[5] = null;
+                    row[6] = null;
                 }
 
                 // Adiciona a linha à tabela
