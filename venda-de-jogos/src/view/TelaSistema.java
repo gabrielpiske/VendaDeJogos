@@ -35,7 +35,7 @@ public class TelaSistema extends javax.swing.JFrame {
     public List<Jogo> carrinho = new ArrayList<>();
     private Carrinho carrinhoAtual = new Carrinho(); // Carrinho ativo na interface
     private CarrinhoDao carrinhoDao = new CarrinhoDao(); // DAO do carrinho
-    private TelaCarrinho telaCarrinho = new TelaCarrinho(new ArrayList<Jogo>());
+    private TelaCarrinho telaCarrinho;
 
     /**
      * Creates new form TelaSistema
@@ -73,6 +73,11 @@ public class TelaSistema extends javax.swing.JFrame {
 
         carregarJogos();
 
+    }
+
+    public TelaSistema(TelaCarrinho telaCarrinho) {
+        this.telaCarrinho = telaCarrinho;
+        initComponents();
     }
 
     private void carregarJogos() {
@@ -335,13 +340,9 @@ public class TelaSistema extends javax.swing.JFrame {
             jogo.setImagem(imageBytes);
 
             JogoDao jogoDao = new JogoDao();
-            try {
-                //cadastra e carrega jogos do bancoo
-                jogoDao.cadJogo(jogo);
-                carregarJogos();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage());
-            }
+            //cadastra e carrega jogos do bancoo
+            jogoDao.cadJogo(jogo);
+            carregarJogos();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao processar a imagem: " + e.getMessage());
         }
@@ -356,68 +357,37 @@ public class TelaSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void imageCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageCartMouseClicked
-        TelaCarrinho telaCarrinho = new TelaCarrinho(carrinhoAtual.getListaJogos());
+        TelaCarrinho telaCarrinho = new TelaCarrinho();
         telaCarrinho.setVisible(true);
         dispose(); // Fecha a tela atual
     }//GEN-LAST:event_imageCartMouseClicked
 
     private void addCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCarrinhoActionPerformed
-        int selectRow = jtblJogos.getSelectedRow();
-
-        if (selectRow == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione um Jogo para colocar no carrinho");
-            return;
-        }
-
-        // Recupera os dados da tabela
-        String nome = (String) jtblJogos.getValueAt(selectRow, 0);
-        String descricao = (String) jtblJogos.getValueAt(selectRow, 1);
-        double preco = (double) jtblJogos.getValueAt(selectRow, 2);
-        String dataLancamento = (String) jtblJogos.getValueAt(selectRow, 3);
-        String classificacao = (String) jtblJogos.getValueAt(selectRow, 4);
-        ImageIcon imagemIcon = (ImageIcon) jtblJogos.getValueAt(selectRow, 5);
-
-        JogoDao jogoDao = new JogoDao();
-        Jogo jogo;
-
-        try {
-            // Busca o jogo no banco pelo nome (ou outro identificador único da tabela)
-            jogo = jogoDao.buscarJogoPorNome(nome);
-
-            if (jogo == null) {
-                JOptionPane.showMessageDialog(this, "Jogo não encontrado no banco de dados.");
-                return;
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao buscar jogo no banco: " + ex.getMessage());
-            return;
-        }
-
-        // Processa a imagem se disponível
-        if (imagemIcon != null && imagemIcon.getImage() != null) {
-            byte[] imagemBytes = imageToByteArray(imagemIcon.getImage());
-            if (imagemBytes != null) {
-                jogo.setImagem(imagemBytes);
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro ao processar a imagem. Jogo será adicionado sem imagem.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Jogo adicionado sem imagem, pois não foi encontrada uma imagem válida.");
-        }
-
-        // Adiciona o jogo ao carrinho
-        carrinhoAtual.getListaJogos().add(jogo);
-        carrinhoAtual.setValorTotal(carrinhoAtual.getValorTotal() + preco);
-
-        try {
-            carrinhoDao.cadCarrinho(carrinhoAtual); // Atualiza o carrinho no banco
-            JOptionPane.showMessageDialog(this, "Jogo adicionado ao carrinho com sucesso!");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar o carrinho: " + ex.getMessage());
-        }
-
-        telaCarrinho.carregarCarrinhoNaTela(); // Atualiza a exibição
+        adicionarAoCarrinho();
     }//GEN-LAST:event_addCarrinhoActionPerformed
+    private void adicionarAoCarrinho() {
+        int selectedRow = jtblJogos.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um jogo para adicionar ao carrinho!");
+            return;
+        }
+
+        // Obtém o modelo da tabela
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        int idJogo = Integer.parseInt(model.getValueAt(selectedRow, 0).toString()); // Supondo que a primeira coluna seja o ID do jogo
+
+        // Cria um novo carrinho e obtém o ID gerado
+        CarrinhoDao carrinhoDao = new CarrinhoDao();
+        int idCarrinho = carrinhoDao.criarNovoCarrinho(); // Novo carrinho
+
+        // Adiciona o jogo ao carrinho no banco de dados
+        try {
+            carrinhoDao.addJogoAoCarrinho(idCarrinho, idJogo);
+            JOptionPane.showMessageDialog(this, "Jogo adicionado ao carrinho! ID do Carrinho: " + idCarrinho);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao adicionar jogo ao carrinho: " + e.getMessage());
+        }
+    }
 
     private byte[] imageToByteArray(Image image) {
         try {

@@ -4,6 +4,7 @@
  */
 package view;
 
+import dao.CarrinhoDao;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -14,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import model.Carrinho;
+import view.TelaSistema;
 import model.Jogo;
 
 /**
@@ -27,12 +28,10 @@ public class TelaCarrinho extends javax.swing.JFrame {
      * Creates new form TelaCarrinho
      */
     private List<Jogo> carrinho;
+    TelaSistema telaSistema;
 
-    public TelaCarrinho(List<Jogo> carrinho) {
+    public TelaCarrinho() {
         initComponents();
-
-        this.carrinho = carrinho;
-        jtxtValorTotal.setText(calcularValorTotal().toString());;
         jlbVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jtxtValorTotal.setEnabled(false);
 
@@ -62,31 +61,41 @@ public class TelaCarrinho extends javax.swing.JFrame {
         });
     }
 
-    public void carregarCarrinhoNaTela() {
-        DefaultTableModel modeloTabela = (DefaultTableModel) jtblJogos.getModel();
-        modeloTabela.setRowCount(0);  // Limpa a tabela antes de adicionar os novos jogos
+    public void carregarJogosNoCarrinho(int idCarrinho) {
+        CarrinhoDao dao = new CarrinhoDao();
+        List<Jogo> jogos = dao.listarJogosNoCarrinho(idCarrinho);
 
-        // Supondo que carrinhoAtual já tenha os jogos carregados, ou use o carrinho do banco de dados
-        for (Jogo jogo : carrinho) {
-            // Adiciona os dados do jogo na tabela
-            Object[] novaLinha = {
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        for (Jogo jogo : jogos) {
+            Object[] linha = {
                 jogo.getNome(),
                 jogo.getDescricao(),
                 jogo.getPreco(),
                 jogo.getDataLancamento(),
                 jogo.getClassificacaoIndicativa(),
-                jogo.getImagem() // Ou você pode transformar a imagem em um ícone para exibir na tabela
+                new ImageIcon(jogo.getImagem()) // Criando a imagem para exibição
             };
-            modeloTabela.addRow(novaLinha);
+            adicionarAoCarrinho(linha);  // Adicionando jogo à tabela
         }
+
+        // Atualizando o valor total após carregar os jogos
+        atualizarValorTotal();
     }
 
-    private Double calcularValorTotal() {
+    public void adicionarAoCarrinho(Object[] linha) {
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        model.addRow(linha);
+    }
+
+    public void atualizarValorTotal() {
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
         double total = 0;
-        for (Jogo jogo : carrinho) {
-            total += jogo.getPreco();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            total += Double.parseDouble(model.getValueAt(i, 2).toString());
         }
-        return total;
+
+        jtxtValorTotal.setText(String.format("%.2f", total));
     }
 
     /**
@@ -224,8 +233,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                List<Jogo> listaJogos = new ArrayList<>();
-                new TelaCarrinho(listaJogos).setVisible(true);
+                new TelaCarrinho().setVisible(true);
             }
         });
     }

@@ -26,11 +26,12 @@ CREATE TABLE `carrinho` (
   `valorTotal` DOUBLE NOT NULL,
   PRIMARY KEY (`idcarrinho`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE carrinho MODIFY COLUMN valorTotal DECIMAL(10, 2) DEFAULT 0;
 
-CREATE TABLE `carrinho_jogo` (
-  `idcarrinho` INT NOT NULL,
-  `idjogo` INT NOT NULL,
-  PRIMARY KEY (`idcarrinho`, `idjogo`),
-  FOREIGN KEY (`idcarrinho`) REFERENCES `carrinho` (`idcarrinho`) ON DELETE CASCADE,
-  FOREIGN KEY (`idjogo`) REFERENCES `jogo` (`idjogo`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE carrinho_jogo (
+    idcarrinho INT NOT NULL,
+    idjogo INT NOT NULL,
+    PRIMARY KEY (idcarrinho, idjogo),
+    FOREIGN KEY (idcarrinho) REFERENCES carrinho(idcarrinho),
+    FOREIGN KEY (idjogo) REFERENCES jogo(idjogo)
+);
