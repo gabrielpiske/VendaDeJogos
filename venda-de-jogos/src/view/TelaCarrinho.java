@@ -5,6 +5,7 @@
 package view;
 
 import dao.CarrinhoDao;
+import dao.JogoDao;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -59,43 +60,16 @@ public class TelaCarrinho extends javax.swing.JFrame {
                 return label;
             }
         });
+        
+        carregarJogos();
     }
-
-    public void carregarJogosNoCarrinho(int idCarrinho) {
-        CarrinhoDao dao = new CarrinhoDao();
-        List<Jogo> jogos = dao.listarJogosNoCarrinho(idCarrinho);
-
+    
+    private void carregarJogos() {
         DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-        for (Jogo jogo : jogos) {
-            Object[] linha = {
-                jogo.getNome(),
-                jogo.getDescricao(),
-                jogo.getPreco(),
-                jogo.getDataLancamento(),
-                jogo.getClassificacaoIndicativa(),
-                new ImageIcon(jogo.getImagem()) // Criando a imagem para exibição
-            };
-            adicionarAoCarrinho(linha);  // Adicionando jogo à tabela
-        }
-
-        // Atualizando o valor total após carregar os jogos
-        atualizarValorTotal();
-    }
-
-    public void adicionarAoCarrinho(Object[] linha) {
-        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-        model.addRow(linha);
-    }
-
-    public void atualizarValorTotal() {
-        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-        double total = 0;
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-            total += Double.parseDouble(model.getValueAt(i, 2).toString());
-        }
-
-        jtxtValorTotal.setText(String.format("%.2f", total));
+        model.setRowCount(0);
+        
+        CarrinhoDao carrinhoDao = new CarrinhoDao();
+        carrinhoDao.listJogosCarrinho(model, TelaSistema.idUsuario);
     }
 
     /**
@@ -132,7 +106,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Nome", "Descrição", "Preço", "Lançamento", "Classificação", "Imagem"
+                "Nome Usuario", "Nome Jogo", "Descricao", "Lançamento", "Classificação", "Imagem"
             }
         ));
         scrlPane.setViewportView(jtblJogos);

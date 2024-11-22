@@ -3,6 +3,8 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 import model.Carrinho;
 import model.Jogo;
 
@@ -35,48 +37,41 @@ public class CarrinhoDao {
         }
     }
 
-    public int criarNovoCarrinho() {
-        // Inserir um novo carrinho sem especificar o idCarrinho, que será gerado automaticamente
-        String sql = "INSERT INTO carrinho () VALUES ()"; // A coluna idCarrinho será gerada automaticamente
-        try (PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.executeUpdate();
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Retorna o ID gerado automaticamente
-                } else {
-                    throw new SQLException("Erro ao obter ID do carrinho.");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao criar novo carrinho: " + e.getMessage(), e);
-        }
-    }
+    public void listJogosCarrinho(DefaultTableModel model, int id) {
+        String sql = "SELECT u.nome AS usuario, j.nome AS jogo, j.descricao, j.dataLancamento, \n" +
+                                             "j.classificacaoIndicativa, j.imagem, c.valorTotal\n" +
+                    "FROM usuario u\n" +
+                    "INNER JOIN carrinho c ON u.id = c.usuario_id\n" +
+                    "INNER JOIN jogo j ON c.jogo_idjogo = j.idjogo\n" +
+                    "WHERE c.usuario_id = ?;";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id); // Define o valor do parâmetro
 
-    public List<Jogo> listarJogosNoCarrinho(int idCarrinho) {
-        String sql = "SELECT j.* FROM carrinho_jogo cj "
-                + "JOIN jogo j ON cj.idjogo = j.idjogo "
-                + "WHERE cj.idcarrinho = ?";
-        List<Jogo> jogos = new ArrayList<>();
-
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, idCarrinho);
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Jogo jogo = new Jogo();
-                    jogo.setIdJogo(rs.getInt("idjogo"));
-                    jogo.setNome(rs.getString("nome"));
-                    jogo.setDescricao(rs.getString("descricao"));
-                    jogo.setPreco(rs.getDouble("preco"));
-                    jogo.setDataLancamento(rs.getString("datalancamento"));
-                    jogo.setClassificacaoIndicativa(rs.getString("classificacaoindicativa"));
-                    jogo.setImagem(rs.getBytes("imagem"));
-                    jogos.add(jogo);
+                    Object[] row = new Object[6];
+
+                    row[0] = rs.getString("usuario");
+                    row[1] = rs.getString("jogo");
+                    row[2] = rs.getString("descricao");
+                    row[3] = rs.getString("dataLancamento");
+                    row[4] = rs.getString("classificacaoIndicativa");
+
+                    // Converte a imagem do banco para ImageIcon
+                    byte[] imgBytes = rs.getBytes("imagem");
+                    if (imgBytes != null) {
+                        ImageIcon imageIcon = new ImageIcon(imgBytes);
+                        row[5] = imageIcon;
+                    } else {
+                        row[5] = null;
+                    }
+
+                    // Adiciona a linha à tabela
+                    model.addRow(row);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar jogos no carrinho: " + e.getMessage(), e);
+            e.printStackTrace();
         }
-
-        return jogos;
     }
 }
