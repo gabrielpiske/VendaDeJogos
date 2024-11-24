@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import view.TelaSistema;
 import model.Jogo;
 
@@ -37,6 +38,15 @@ public class TelaCarrinho extends javax.swing.JFrame {
         jtxtValorTotal.setEnabled(false);
 
         setTitle("Carrinho - Venda de Jogos");
+        tabelaImagem(); //formata pra suportar imageicon
+        tabelaPreco(); //formata preco
+        
+        //Carrega conteudo da tabela
+        carregarJogos();
+        calcularValorTotal();
+    }
+
+    private void tabelaImagem() {
         jtblJogos.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -60,16 +70,44 @@ public class TelaCarrinho extends javax.swing.JFrame {
                 return label;
             }
         });
-        
-        carregarJogos();
     }
-    
+
+    private void tabelaPreco() {
+        TableColumn colunaPreco = jtblJogos.getColumnModel().getColumn(6);
+        colunaPreco.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                if (value instanceof Double) {
+                    setText(String.format("R$ %.2f", value).replace(".", ","));
+                } else {
+                    super.setValue(value);
+                }
+            }
+        });
+    }
+
     private void carregarJogos() {
         DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
         model.setRowCount(0);
-        
+
         CarrinhoDao carrinhoDao = new CarrinhoDao();
         carrinhoDao.listJogosCarrinho(model, TelaSistema.idUsuario);
+    }
+
+    public void calcularValorTotal() {
+        double valorTotal = 0.0;
+
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        int rowCount = model.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            Object valorObj = model.getValueAt(i, 6);
+            if (valorObj instanceof Double) {
+                valorTotal += (Double) valorObj;
+            }
+        }
+
+        jtxtValorTotal.setText(String.format("R$ %.2f", valorTotal));
     }
 
     /**
@@ -95,18 +133,18 @@ public class TelaCarrinho extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Carrinho");
 
-        jblCarrinho.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jblCarrinho.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jblCarrinho.setText("Carrinho");
 
         jtblJogos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nome Usuario", "Nome Jogo", "Descricao", "Lançamento", "Classificação", "Imagem"
+                "Usuário", "Jogo", "Descricao", "Lançamento", "Classificação", "Imagem", "Valor"
             }
         ));
         scrlPane.setViewportView(jtblJogos);
@@ -116,7 +154,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
 
         jbtnFinalizar.setText("Finalizar Compra");
 
-        jlbVoltar.setText("Voltar");
+        jlbVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Image/setaLogin.png"))); // NOI18N
         jlbVoltar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jlbVoltar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -139,12 +177,11 @@ public class TelaCarrinho extends javax.swing.JFrame {
                                 .addGap(25, 25, 25)
                                 .addComponent(jblValorTotal)
                                 .addGap(18, 18, 18)
-                                .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jlbVoltar)
-                                .addGap(207, 207, 207)))
+                                .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jlbVoltar)))
+                        .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jblCarrinho)
                             .addComponent(jbtnFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -157,13 +194,13 @@ public class TelaCarrinho extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jblCarrinho)
                     .addComponent(jlbVoltar))
-                .addGap(39, 39, 39)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jblValorTotal)
                     .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnFinalizar))
                 .addGap(18, 18, 18)
-                .addComponent(scrlPane, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                .addComponent(scrlPane, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
         );
 

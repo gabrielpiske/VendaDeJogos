@@ -43,6 +43,7 @@ public class JogoDao {
                     jogo.setIdJogo(idGerado);   // Atualiza o ID no objeto
                 }
             }
+            JOptionPane.showMessageDialog(null, "Jogo Salvo com sucesso!");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar o jogo: " + e.getMessage(), e);
         }

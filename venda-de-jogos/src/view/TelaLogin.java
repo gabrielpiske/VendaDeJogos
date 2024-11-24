@@ -21,13 +21,7 @@ public class TelaLogin extends javax.swing.JFrame {
      */
     public TelaLogin() {
         initComponents();
-        
-        jtfNewCod.setVisible(false);
-        jtfNewSenha.setVisible(false);
-        jlbCod.setVisible(false);
-        jlbNewSenha.setVisible(false);
-        btnSalvarNewSenha.setVisible(false);
-        
+               
         setTitle("Tela Login - Venda de Jogos");
     }
 
@@ -44,35 +38,24 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnReeset = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
         jtfPassword = new javax.swing.JPasswordField();
         jtfUsuario = new javax.swing.JTextField();
-        jlbCod = new javax.swing.JLabel();
-        jlbNewSenha = new javax.swing.JLabel();
-        btnSalvarNewSenha = new javax.swing.JButton();
-        jtfNewCod = new javax.swing.JTextField();
-        jtfNewSenha = new javax.swing.JTextField();
         jbtnCadUseer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Login");
 
-        jLabel1.setFont(new java.awt.Font("JetBrains Mono", 0, 24)); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(396, 300));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel1.setText("Tela de Login");
 
         jLabel2.setFont(new java.awt.Font("JetBrains Mono", 0, 18)); // NOI18N
-        jLabel2.setText("Usuario");
+        jLabel2.setText("Usuário");
 
         jLabel3.setFont(new java.awt.Font("JetBrains Mono", 0, 18)); // NOI18N
         jLabel3.setText("Senha");
-
-        btnReeset.setText("Reset");
-        btnReeset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReesetActionPerformed(evt);
-            }
-        });
 
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -81,20 +64,7 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
 
-        jlbCod.setFont(new java.awt.Font("JetBrains Mono", 0, 18)); // NOI18N
-        jlbCod.setText("Informe o Código");
-
-        jlbNewSenha.setFont(new java.awt.Font("JetBrains Mono", 0, 18)); // NOI18N
-        jlbNewSenha.setText("Nova Senha: ");
-
-        btnSalvarNewSenha.setText("Salvar");
-        btnSalvarNewSenha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarNewSenhaActionPerformed(evt);
-            }
-        });
-
-        jbtnCadUseer.setText("Criar Usuario");
+        jbtnCadUseer.setText("Criar Novo Usuário");
         jbtnCadUseer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCadUseerActionPerformed(evt);
@@ -106,48 +76,35 @@ public class TelaLogin extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtfUsuario)
-                            .addComponent(jtfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(103, 103, 103))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSalvarNewSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jtfUsuario)
+                                    .addComponent(jtfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnReeset, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(11, 11, 11)
-                                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jbtnCadUseer))
-                                    .addComponent(jLabel3)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jlbCod)
-                                            .addComponent(jlbNewSenha))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jtfNewSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                                            .addComponent(jtfNewCod))))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(103, 103, 103))
+                                        .addComponent(jLabel3)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jbtnCadUseer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jtfUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -155,29 +112,18 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReeset)
-                    .addComponent(btnLogin)
-                    .addComponent(jbtnCadUseer))
-                .addGap(42, 42, 42)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlbCod)
-                    .addComponent(jtfNewCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlbNewSenha)
-                    .addComponent(jtfNewSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSalvarNewSenha)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addComponent(jbtnCadUseer)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,25 +133,6 @@ public class TelaLogin extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnSalvarNewSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarNewSenhaActionPerformed
-        if (!jtfNewCod.getText().isBlank() && !jtfNewSenha.getText().isBlank()) {
-            UsuarioDao usu = new UsuarioDao();
-            try {
-                usu.alterarUsuario(Integer.parseInt(jtfNewCod.getText()), jtfNewSenha.getText());
-                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Erro: " + e);
-            }
-        } else{
-          JOptionPane.showMessageDialog(null, "Preencha corretamente os campos.");
-        }
-        jtfNewCod.setVisible(false);
-        jtfNewSenha.setVisible(false);
-        jlbCod.setVisible(false);
-        jlbNewSenha.setVisible(false);
-        btnSalvarNewSenha.setVisible(false);
-    }//GEN-LAST:event_btnSalvarNewSenhaActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         UsuarioDao usuariodao = new UsuarioDao();
@@ -225,26 +152,10 @@ public class TelaLogin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
-    private void btnReesetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReesetActionPerformed
-        jtfNewCod.setVisible(true);
-        jtfNewSenha.setVisible(true);
-        jlbCod.setVisible(true);
-        jlbNewSenha.setVisible(true);
-        btnSalvarNewSenha.setVisible(true);
-    }//GEN-LAST:event_btnReesetActionPerformed
-
     private void jbtnCadUseerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCadUseerActionPerformed
-        String senha = new String(jtfPassword.getPassword());
-
-        if (!jtfUsuario.getText().isBlank() && !senha.isBlank()) {
-            UsuarioDao dao = new UsuarioDao();
-            usuario = new Usuario(jtfUsuario.getText(), senha);
-            dao.cadUsuario(usuario);
-        } else {
-            JOptionPane.showMessageDialog(null, "Preencha os campos corretamente.");
-        }
-        jtfUsuario.setText("");
-        jtfPassword.setText("");
+        dispose();
+        TelaCriarUsuario criarUsuario = new TelaCriarUsuario();
+        criarUsuario.setVisible(true);
     }//GEN-LAST:event_jbtnCadUseerActionPerformed
 
     /**
@@ -287,17 +198,11 @@ public class TelaLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton btnReeset;
-    private javax.swing.JButton btnSalvarNewSenha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtnCadUseer;
-    private javax.swing.JLabel jlbCod;
-    private javax.swing.JLabel jlbNewSenha;
-    private javax.swing.JTextField jtfNewCod;
-    private javax.swing.JTextField jtfNewSenha;
     private javax.swing.JPasswordField jtfPassword;
     private javax.swing.JTextField jtfUsuario;
     // End of variables declaration//GEN-END:variables

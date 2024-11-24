@@ -157,7 +157,7 @@ public class TelaSistema extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtblJogos);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel1.setText("Venda de Jogos");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -208,7 +208,7 @@ public class TelaSistema extends javax.swing.JFrame {
             }
         });
 
-        jblVoltar.setText("Tela Login");
+        jblVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Image/setaLogin.png"))); // NOI18N
         jblVoltar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jblVoltarMouseClicked(evt);
@@ -235,9 +235,8 @@ public class TelaSistema extends javax.swing.JFrame {
                                     .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txtImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnArquivo)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addComponent(addCarrinho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,35 +330,40 @@ public class TelaSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArquivoActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        Jogo jogo = new Jogo();
-        jogo.setNome(txtNome.getText());
-        jogo.setDescricao(jtaDesc.getText());
-        jogo.setPreco(Double.parseDouble(txtPreco.getText()));
-        jogo.setDataLancamento(txtDataLancamento.getText());
-        jogo.setClassificacaoIndicativa(txtClassificacao.getText());
+        if (txtNome.getText().isBlank() || jtaDesc.getText().isBlank() || txtPreco.getText().isBlank()
+                || txtDataLancamento.getText().isBlank() || txtClassificacao.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Preencha todas as informações");
+        } else {
+            Jogo jogo = new Jogo();
+            jogo.setNome(txtNome.getText());
+            jogo.setDescricao(jtaDesc.getText());
+            jogo.setPreco(Double.parseDouble(txtPreco.getText()));
+            jogo.setDataLancamento(txtDataLancamento.getText());
+            jogo.setClassificacaoIndicativa(txtClassificacao.getText());
 
-        //tentar a bagaceira da imagem
-        try {
-            File file = new File(txtImagem.getText());
-            FileInputStream fis = new FileInputStream(file);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //tentar a bagaceira da imagem
+            try {
+                File file = new File(txtImagem.getText());
+                FileInputStream fis = new FileInputStream(file);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
+                byte[] buffer = new byte[1024];
+                int bytesRead;
 
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                baos.write(buffer, 0, bytesRead);
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    baos.write(buffer, 0, bytesRead);
+                }
+
+                byte[] imageBytes = baos.toByteArray();
+                jogo.setImagem(imageBytes);
+
+                JogoDao jogoDao = new JogoDao();
+                //cadastra e carrega jogos do bancoo
+                jogoDao.cadJogo(jogo);
+                carregarJogos();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar a imagem: " + e.getMessage());
             }
-
-            byte[] imageBytes = baos.toByteArray();
-            jogo.setImagem(imageBytes);
-
-            JogoDao jogoDao = new JogoDao();
-            //cadastra e carrega jogos do bancoo
-            jogoDao.cadJogo(jogo);
-            carregarJogos();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao processar a imagem: " + e.getMessage());
         }
 
         //limpeza
