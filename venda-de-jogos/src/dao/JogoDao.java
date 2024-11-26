@@ -106,16 +106,18 @@ public class JogoDao {
     }
 
     public void deleteById(int id) {
+        if (isJogoEmUso(id)) {
+            JOptionPane.showMessageDialog(null, "O jogo não pode ser excluído porque está sendo utilizado em outra tabela.");
+            return;
+        }
+
         String sql = "DELETE FROM jogo WHERE idjogo = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            // Define o ID do jogo a ser excluído
             stmt.setInt(1, id);
 
-            // Executa a exclusão
             int affectedRows = stmt.executeUpdate();
 
-            // Verifica se a exclusão foi bem-sucedida
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(null, "Jogo excluído com sucesso!");
             } else {
@@ -125,5 +127,23 @@ public class JogoDao {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o jogo: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private boolean isJogoEmUso(int id) {
+        String sql = "SELECT COUNT(*) FROM carrinho WHERE jogo_idjogo = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar dependências: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }

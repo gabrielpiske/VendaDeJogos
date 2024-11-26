@@ -398,7 +398,7 @@ public class TelaSistema extends javax.swing.JFrame {
 
         // Atualiza os textos dos botões
         btnSave.setText("Salvar Jogo");
-        btnAddCarrinho.setText("Adicionar ao Carrinho");
+        btnAddCarrinho.setText("Adicionar ao Carrinho");  // Botão volta ao estado original
         btnAddCarrinho.setEnabled(true);
         btnArquivo.setEnabled(true);
         jbtnEdit.setText("Editar");
@@ -413,7 +413,7 @@ public class TelaSistema extends javax.swing.JFrame {
 
     private void btnAddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCarrinhoActionPerformed
         if (isEditMode) {
-            // Em modo de edição, mudar o botão para "Excluir" e remover o jogo
+            // Se em modo de edição, o botão vira "Excluir" e remove o jogo
             DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
             int selectedRow = jtblJogos.getSelectedRow();
             int selectId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
@@ -427,8 +427,14 @@ public class TelaSistema extends javax.swing.JFrame {
 
             // Atualizar a lista de jogos
             carregarJogos();
+
+            // Após excluir, volta ao estado original
+            btnAddCarrinho.setText("Adicionar ao Carrinho");
+            isEditMode = false;
+            jogoEditandoId = -1;
+            jbtnEdit.setEnabled(true); // Habilita o botão de editar novamente
         } else {
-            // Adicionar o jogo ao carrinho
+            // Adicionar o jogo ao carrinho (quando não está em modo de edição)
             btnAddCarrinho.setText("Adicionar ao Carrinho");
             int selectedRow = jtblJogos.getSelectedRow();
             if (selectedRow == -1) {
@@ -460,44 +466,31 @@ public class TelaSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jblVoltarMouseClicked
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
-        if (isEditMode) {
-            // Se já está no modo de edição, cancelar a edição
-            limparCampos();
-            isEditMode = false;
-            btnSave.setText("Salvar Jogo");
-            btnAddCarrinho.setText("Adicionar ao Carrinho");
-            btnAddCarrinho.setEnabled(true);
-            btnArquivo.setEnabled(true);
-            jbtnEdit.setText("Editar");
-            jbtnEdit.setEnabled(true);
-        } else {
-            // Em modo normal, permite a edição
-            int selectedRow = jtblJogos.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Selecione um jogo para editar!");
-                return;
-            }
-
-            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-            jogoEditandoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
-
-            // Carregar os dados do jogo para os campos de edição
-            txtNome.setText(model.getValueAt(selectedRow, 1).toString());
-            jtaDesc.setText(model.getValueAt(selectedRow, 2).toString());
-            txtPreco.setText(model.getValueAt(selectedRow, 3).toString());
-            txtDataLancamento.setText(model.getValueAt(selectedRow, 4).toString());
-            txtClassificacao.setText(model.getValueAt(selectedRow, 5).toString());
-            txtImagem.setText("");
-
-            // Modo de edição
-            isEditMode = true;
-            btnSave.setText("Atualizar Jogo");
-            btnSave.setEnabled(true);
-            btnAddCarrinho.setEnabled(false);
-
-            // Alterar o botão de edição para "Cancelar"
-            jbtnEdit.setText("Cancelar");
+        int selectedRow = jtblJogos.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um jogo para editar!");
+            return;
         }
+
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        jogoEditandoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+        // Puxa os dados para os campos
+        txtNome.setText(model.getValueAt(selectedRow, 1).toString());
+        jtaDesc.setText(model.getValueAt(selectedRow, 2).toString());
+        txtPreco.setText(model.getValueAt(selectedRow, 3).toString());
+        txtDataLancamento.setText(model.getValueAt(selectedRow, 4).toString());
+        txtClassificacao.setText(model.getValueAt(selectedRow, 5).toString());
+        txtImagem.setText("");
+
+        // Modo de edição
+        isEditMode = true;
+        btnSave.setText("Atualizar Jogo");
+        btnSave.setEnabled(true);
+
+        // Mudar texto do botão para "Excluir"
+        btnAddCarrinho.setText("Excluir");
+        jbtnEdit.setEnabled(false);
     }//GEN-LAST:event_jbtnEditActionPerformed
 
     private void limparCampos() {
