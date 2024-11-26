@@ -388,17 +388,12 @@ public class TelaSistema extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao processar a imagem: " + e.getMessage());
             }
         }
-
-        // Limpeza de campos após salvar ou atualizar
         limparCampos();
-
-        // Modo de cadastro (resetando para o estado inicial)
         isEditMode = false;
         jogoEditandoId = -1;
 
-        // Atualiza os textos dos botões
         btnSave.setText("Salvar Jogo");
-        btnAddCarrinho.setText("Adicionar ao Carrinho");  // Botão volta ao estado original
+        btnAddCarrinho.setText("Adicionar ao Carrinho");
         btnAddCarrinho.setEnabled(true);
         btnArquivo.setEnabled(true);
         jbtnEdit.setText("Editar");
@@ -408,54 +403,45 @@ public class TelaSistema extends javax.swing.JFrame {
     private void imageCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageCartMouseClicked
         TelaCarrinho telaCarrinho = new TelaCarrinho();
         telaCarrinho.setVisible(true);
-        dispose(); // Fecha a tela atual
+        dispose();
     }//GEN-LAST:event_imageCartMouseClicked
 
     private void btnAddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCarrinhoActionPerformed
-        if (isEditMode) {
-            // Se em modo de edição, o botão vira "Excluir" e remove o jogo
-            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-            int selectedRow = jtblJogos.getSelectedRow();
-            int selectId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+        int selectedRow = jtblJogos.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um jogo na tabela para continuar!");
+            return;
+        }
 
-            // Alterar o texto do botão para "Excluir"
-            btnAddCarrinho.setText("Excluir");
+        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+        int jogoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
 
-            // Excluir o jogo
-            JogoDao jogoDao = new JogoDao();
-            jogoDao.deleteById(selectId);
-
-            // Atualizar a lista de jogos
-            carregarJogos();
-
-            // Após excluir, volta ao estado original
-            btnAddCarrinho.setText("Adicionar ao Carrinho");
-            isEditMode = false;
-            jogoEditandoId = -1;
-            jbtnEdit.setEnabled(true); // Habilita o botão de editar novamente
-        } else {
-            // Adicionar o jogo ao carrinho (quando não está em modo de edição)
-            btnAddCarrinho.setText("Adicionar ao Carrinho");
-            int selectedRow = jtblJogos.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Selecione um jogo para adicionar ao carrinho!");
-                return;
+        if (btnAddCarrinho.getText().equals("Excluir")) {
+            int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir o jogo?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    JogoDao jogoDao = new JogoDao();
+                    jogoDao.deleteById(jogoId);
+                    JOptionPane.showMessageDialog(this, "Jogo excluído com sucesso!");
+                    carregarJogos();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao excluir o jogo: " + ex.getMessage());
+                }
             }
-
-            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-            int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
-
+            btnAddCarrinho.setText("Adicionar ao Carrinho");
+        } else {
             List<Integer> listaJogos = new ArrayList<>();
-            listaJogos.add(id);
+            listaJogos.add(jogoId);
 
             List<Double> valorTotal = new ArrayList<>();
-            valorTotal.add(Double.parseDouble(model.getValueAt(selectedRow, 3) + ""));
+            valorTotal.add(Double.parseDouble(model.getValueAt(selectedRow, 3).toString()));
 
             CarrinhoDao carrinhoDao = new CarrinhoDao();
             Carrinho carrinho = new Carrinho(idUsuario, listaJogos, valorTotal);
             carrinhoDao.addJogoAoCarrinho(carrinho);
-        }
 
+            JOptionPane.showMessageDialog(this, "Jogo adicionado ao carrinho!");
+        }
     }//GEN-LAST:event_btnAddCarrinhoActionPerformed
 
     private void jblVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jblVoltarMouseClicked
@@ -466,31 +452,41 @@ public class TelaSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jblVoltarMouseClicked
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
-        int selectedRow = jtblJogos.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione um jogo para editar!");
-            return;
+        if (isEditMode) {
+            limparCampos();
+            isEditMode = false;
+            jogoEditandoId = -1;
+            btnSave.setText("Salvar Jogo");
+            jbtnEdit.setText("Editar");
+            btnAddCarrinho.setText("Adicionar ao Carrinho");
+            btnAddCarrinho.setEnabled(true);
+            btnArquivo.setEnabled(true);
+        } else {
+            int selectedRow = jtblJogos.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Selecione um jogo para editar!");
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+            jogoEditandoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+            // Puxa os dados para os campos
+            txtNome.setText(model.getValueAt(selectedRow, 1).toString());
+            jtaDesc.setText(model.getValueAt(selectedRow, 2).toString());
+            txtPreco.setText(model.getValueAt(selectedRow, 3).toString());
+            txtDataLancamento.setText(model.getValueAt(selectedRow, 4).toString());
+            txtClassificacao.setText(model.getValueAt(selectedRow, 5).toString());
+            txtImagem.setText("");
+
+            // Modo de edição
+            isEditMode = true;
+            btnSave.setText("Atualizar Jogo");
+            jbtnEdit.setText("Cancelar");
+            btnAddCarrinho.setText("Excluir");
+            btnAddCarrinho.setEnabled(true);
+            btnArquivo.setEnabled(true);
         }
-
-        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-        jogoEditandoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
-
-        // Puxa os dados para os campos
-        txtNome.setText(model.getValueAt(selectedRow, 1).toString());
-        jtaDesc.setText(model.getValueAt(selectedRow, 2).toString());
-        txtPreco.setText(model.getValueAt(selectedRow, 3).toString());
-        txtDataLancamento.setText(model.getValueAt(selectedRow, 4).toString());
-        txtClassificacao.setText(model.getValueAt(selectedRow, 5).toString());
-        txtImagem.setText("");
-
-        // Modo de edição
-        isEditMode = true;
-        btnSave.setText("Atualizar Jogo");
-        btnSave.setEnabled(true);
-
-        // Mudar texto do botão para "Excluir"
-        btnAddCarrinho.setText("Excluir");
-        jbtnEdit.setEnabled(false);
     }//GEN-LAST:event_jbtnEditActionPerformed
 
     private void limparCampos() {

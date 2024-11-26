@@ -107,7 +107,7 @@ public class JogoDao {
 
     public void deleteById(int id) {
         if (isJogoEmUso(id)) {
-            JOptionPane.showMessageDialog(null, "O jogo não pode ser excluído porque está sendo utilizado em outra tabela.");
+            JOptionPane.showMessageDialog(null, "Não é possivel excluir um jogo presente em algum carrinho.");
             return;
         }
 
