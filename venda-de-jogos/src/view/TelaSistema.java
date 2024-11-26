@@ -37,6 +37,8 @@ public class TelaSistema extends javax.swing.JFrame {
     private TelaCarrinho telaCarrinho;
 
     public static int idUsuario;
+    private boolean isEditMode = false;
+    private int jogoEditandoId = -1;
 
     /**
      * Creates new form TelaSistema
@@ -117,8 +119,9 @@ public class TelaSistema extends javax.swing.JFrame {
         btnArquivo = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         imageCart = new javax.swing.JLabel();
-        addCarrinho = new javax.swing.JButton();
+        btnAddCarrinho = new javax.swing.JButton();
         jblVoltar = new javax.swing.JLabel();
+        jbtnEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Principal");
@@ -201,10 +204,10 @@ public class TelaSistema extends javax.swing.JFrame {
             }
         });
 
-        addCarrinho.setText("Adicionar ao Carrinho");
-        addCarrinho.addActionListener(new java.awt.event.ActionListener() {
+        btnAddCarrinho.setText("Adicionar ao Carrinho");
+        btnAddCarrinho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCarrinhoActionPerformed(evt);
+                btnAddCarrinhoActionPerformed(evt);
             }
         });
 
@@ -212,6 +215,13 @@ public class TelaSistema extends javax.swing.JFrame {
         jblVoltar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jblVoltarMouseClicked(evt);
+            }
+        });
+
+        jbtnEdit.setText("Editar");
+        jbtnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEditActionPerformed(evt);
             }
         });
 
@@ -227,32 +237,38 @@ public class TelaSistema extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAddCarrinho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jbtnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(addCarrinho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtDataLancamento, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6))))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDataLancamento, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtClassificacao, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtClassificacao, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                                     .addComponent(jLabel5))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -292,19 +308,20 @@ public class TelaSistema extends javax.swing.JFrame {
                             .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnArquivo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnArquivo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnEdit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSave)
-                        .addGap(3, 3, 3)
-                        .addComponent(addCarrinho))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAddCarrinho))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -333,6 +350,7 @@ public class TelaSistema extends javax.swing.JFrame {
         if (txtNome.getText().isBlank() || jtaDesc.getText().isBlank() || txtPreco.getText().isBlank()
                 || txtDataLancamento.getText().isBlank() || txtClassificacao.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "Preencha todas as informações");
+            return;
         } else {
             Jogo jogo = new Jogo();
             jogo.setNome(txtNome.getText());
@@ -341,7 +359,6 @@ public class TelaSistema extends javax.swing.JFrame {
             jogo.setDataLancamento(txtDataLancamento.getText());
             jogo.setClassificacaoIndicativa(txtClassificacao.getText());
 
-            //tentar a bagaceira da imagem
             try {
                 File file = new File(txtImagem.getText());
                 FileInputStream fis = new FileInputStream(file);
@@ -358,21 +375,34 @@ public class TelaSistema extends javax.swing.JFrame {
                 jogo.setImagem(imageBytes);
 
                 JogoDao jogoDao = new JogoDao();
-                //cadastra e carrega jogos do bancoo
-                jogoDao.cadJogo(jogo);
+                if (isEditMode) {
+                    jogo.setIdJogo(jogoEditandoId);
+                    jogoDao.updateJogo(jogo);
+                    JOptionPane.showMessageDialog(this, "Jogo atualizado com sucesso!");
+                } else {
+                    jogoDao.cadJogo(jogo);
+                    JOptionPane.showMessageDialog(this, "Jogo cadastrado com sucesso!");
+                }
                 carregarJogos();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao processar a imagem: " + e.getMessage());
             }
         }
 
-        //limpeza
-        txtClassificacao.setText("");
-        txtDataLancamento.setText("");
-        txtImagem.setText("");
-        txtNome.setText("");
-        txtPreco.setText("");
-        jtaDesc.setText("");
+        // Limpeza de campos após salvar ou atualizar
+        limparCampos();
+
+        // Modo de cadastro (resetando para o estado inicial)
+        isEditMode = false;
+        jogoEditandoId = -1;
+
+        // Atualiza os textos dos botões
+        btnSave.setText("Salvar Jogo");
+        btnAddCarrinho.setText("Adicionar ao Carrinho");
+        btnAddCarrinho.setEnabled(true);
+        btnArquivo.setEnabled(true);
+        jbtnEdit.setText("Editar");
+        jbtnEdit.setEnabled(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void imageCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageCartMouseClicked
@@ -381,34 +411,103 @@ public class TelaSistema extends javax.swing.JFrame {
         dispose(); // Fecha a tela atual
     }//GEN-LAST:event_imageCartMouseClicked
 
-    private void addCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCarrinhoActionPerformed
-        int selectedRow = jtblJogos.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione um jogo para adicionar ao carrinho!");
-            return;
+    private void btnAddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCarrinhoActionPerformed
+        if (isEditMode) {
+            // Em modo de edição, mudar o botão para "Excluir" e remover o jogo
+            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+            int selectedRow = jtblJogos.getSelectedRow();
+            int selectId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+            // Alterar o texto do botão para "Excluir"
+            btnAddCarrinho.setText("Excluir");
+
+            // Excluir o jogo
+            JogoDao jogoDao = new JogoDao();
+            jogoDao.deleteById(selectId);
+
+            // Atualizar a lista de jogos
+            carregarJogos();
+        } else {
+            // Adicionar o jogo ao carrinho
+            btnAddCarrinho.setText("Adicionar ao Carrinho");
+            int selectedRow = jtblJogos.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Selecione um jogo para adicionar ao carrinho!");
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+            int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+            List<Integer> listaJogos = new ArrayList<>();
+            listaJogos.add(id);
+
+            List<Double> valorTotal = new ArrayList<>();
+            valorTotal.add(Double.parseDouble(model.getValueAt(selectedRow, 3) + ""));
+
+            CarrinhoDao carrinhoDao = new CarrinhoDao();
+            Carrinho carrinho = new Carrinho(idUsuario, listaJogos, valorTotal);
+            carrinhoDao.addJogoAoCarrinho(carrinho);
         }
 
-        // Obtém o modelo da tabela
-        DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
-
-        int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
-
-        List<Integer> listaJogos = new ArrayList<>();
-        listaJogos.add(id);
-
-        List<Double> valorTotal = new ArrayList<>();
-        valorTotal.add(Double.parseDouble(model.getValueAt(selectedRow, 3) + ""));
-
-        CarrinhoDao carrinhoDao = new CarrinhoDao();
-        Carrinho carrinho = new Carrinho(idUsuario, listaJogos, valorTotal);
-        carrinhoDao.addJogoAoCarrinho(carrinho);
-    }//GEN-LAST:event_addCarrinhoActionPerformed
+    }//GEN-LAST:event_btnAddCarrinhoActionPerformed
 
     private void jblVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jblVoltarMouseClicked
-        dispose();
+        idUsuario = 0;
         TelaLogin login = new TelaLogin();
         login.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jblVoltarMouseClicked
+
+    private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
+        if (isEditMode) {
+            // Se já está no modo de edição, cancelar a edição
+            limparCampos();
+            isEditMode = false;
+            btnSave.setText("Salvar Jogo");
+            btnAddCarrinho.setText("Adicionar ao Carrinho");
+            btnAddCarrinho.setEnabled(true);
+            btnArquivo.setEnabled(true);
+            jbtnEdit.setText("Editar");
+            jbtnEdit.setEnabled(true);
+        } else {
+            // Em modo normal, permite a edição
+            int selectedRow = jtblJogos.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Selecione um jogo para editar!");
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
+            jogoEditandoId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+            // Carregar os dados do jogo para os campos de edição
+            txtNome.setText(model.getValueAt(selectedRow, 1).toString());
+            jtaDesc.setText(model.getValueAt(selectedRow, 2).toString());
+            txtPreco.setText(model.getValueAt(selectedRow, 3).toString());
+            txtDataLancamento.setText(model.getValueAt(selectedRow, 4).toString());
+            txtClassificacao.setText(model.getValueAt(selectedRow, 5).toString());
+            txtImagem.setText("");
+
+            // Modo de edição
+            isEditMode = true;
+            btnSave.setText("Atualizar Jogo");
+            btnSave.setEnabled(true);
+            btnAddCarrinho.setEnabled(false);
+
+            // Alterar o botão de edição para "Cancelar"
+            jbtnEdit.setText("Cancelar");
+        }
+    }//GEN-LAST:event_jbtnEditActionPerformed
+
+    private void limparCampos() {
+        txtClassificacao.setText("");
+        txtDataLancamento.setText("");
+        txtImagem.setText("");
+        txtNome.setText("");
+        txtPreco.setText("");
+        jtaDesc.setText("");
+    }
 
     private byte[] imageToByteArray(Image image) {
         try {
@@ -469,7 +568,7 @@ public class TelaSistema extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addCarrinho;
+    private javax.swing.JButton btnAddCarrinho;
     private javax.swing.JButton btnArquivo;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel imageCart;
@@ -482,6 +581,7 @@ public class TelaSistema extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel jblVoltar;
+    private javax.swing.JButton jbtnEdit;
     private javax.swing.JTextArea jtaDesc;
     private javax.swing.JTable jtblJogos;
     private javax.swing.JTextField txtClassificacao;

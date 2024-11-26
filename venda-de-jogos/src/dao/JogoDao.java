@@ -59,7 +59,7 @@ public class JogoDao {
             //model.setRowCount(0);
             while (rs.next()) {
                 Object[] row = new Object[7];
-                
+
                 row[0] = rs.getInt("idjogo");
                 row[1] = rs.getString("nome");
                 row[2] = rs.getString("descricao");
@@ -84,28 +84,46 @@ public class JogoDao {
         }
     }
 
-    public Jogo buscarJogoPorNome(String nome) throws SQLException {
-        String sql = "SELECT * FROM jogo WHERE nome = ?";
-        Jogo jogo = null;
+    public void updateJogo(Jogo jogo) {
+        String sql = "UPDATE jogo SET nome = ?, descricao = ?, preco = ?, datalancamento = ?, "
+                + "classificacaoindicativa = ?, imagem = ? "
+                + "WHERE idjogo = ?";
 
-        try (Connection conn = new ConexaoBanco().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, jogo.getNome());
+            stmt.setString(2, jogo.getDescricao());
+            stmt.setDouble(3, jogo.getPreco());
+            stmt.setString(4, jogo.getDataLancamento());
+            stmt.setString(5, jogo.getClassificacaoIndicativa());
+            stmt.setBytes(6, jogo.getImagem());
+            stmt.setInt(7, jogo.getIdJogo());
 
-            stmt.setString(1, nome);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    jogo = new Jogo();
-                    jogo.setIdJogo(rs.getInt("idjogo"));
-                    jogo.setNome(rs.getString("nome"));
-                    jogo.setDescricao(rs.getString("descricao"));
-                    jogo.setPreco(rs.getDouble("preco"));
-                    jogo.setDataLancamento(rs.getString("datalancamento"));
-                    jogo.setClassificacaoIndicativa(rs.getString("classificacaoindicativa"));
-                    jogo.setImagem(rs.getBytes("imagem"));
-                }
-            }
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Jogo atualizado com sucesso!");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar o jogo: " + e.getMessage(), e);
         }
+    }
 
-        return jogo;
+    public void deleteById(int id) {
+        String sql = "DELETE FROM jogo WHERE idjogo = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            // Define o ID do jogo a ser excluído
+            stmt.setInt(1, id);
+
+            // Executa a exclusão
+            int affectedRows = stmt.executeUpdate();
+
+            // Verifica se a exclusão foi bem-sucedida
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(null, "Jogo excluído com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao excluir jogo. Jogo não encontrado.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o jogo: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
