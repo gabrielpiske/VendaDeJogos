@@ -4,12 +4,8 @@
  */
 package view;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-import java.awt.Color;
+import dao.CarrinhoDao;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.swing.ImageIcon;
 import util.PixUtils;
 
@@ -26,7 +22,15 @@ public class TelaPix extends javax.swing.JFrame {
         initComponents();
         setTitle("Pagamento PIX - Venda Jogos");
 
-        
+        try {
+            // Gerar o QR Code com a chave Pix e o valor (exemplo)
+            BufferedImage qrCodeImage = PixUtils.gerarPixQRCode("juliohenri.busarello@gmail.com", TelaFinalizarCompra.valor);
+            
+            // Exibir a imagem do QR Code na label
+            imagemPix.setIcon(new ImageIcon(qrCodeImage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -101,9 +105,12 @@ public class TelaPix extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTelaInicial4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaInicial4ActionPerformed
+        dispose();
         TelaSistema sistema = new TelaSistema();
         sistema.setVisible(true);
-        dispose();
+        
+        CarrinhoDao carrinhoDao = new CarrinhoDao();
+        carrinhoDao.deleteAll(TelaSistema.idUsuario);
     }//GEN-LAST:event_btnTelaInicial4ActionPerformed
 
     /**

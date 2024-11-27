@@ -13,7 +13,7 @@ import java.awt.Cursor;
  */
 public class TelaFinalizarCompra extends javax.swing.JFrame {
 
-    double valor = 0;
+    public static double valor = 0;
 
     /**
      * Creates new form TelaFinalizarCompra

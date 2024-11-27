@@ -21,7 +21,7 @@ public class TelaCriarUsuario extends javax.swing.JFrame {
      */
     public TelaCriarUsuario() {
         initComponents();
-        
+
         setTitle("Criar Usuário - Venda de Jogos");
     }
 
@@ -114,16 +114,9 @@ public class TelaCriarUsuario extends javax.swing.JFrame {
             usuario = new Usuario(jtfUsuario.getText(), senha);
             dao.cadUsuario(usuario);
 
-            if (usuario != null) {
-                dispose();
-                TelaSistema tela = new TelaSistema();
-                tela.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuario ou senha Inválido");
-                TelaLogin telaLogin = new TelaLogin();
-                telaLogin.setVisible(true);
-                this.dispose();
-            }
+            dispose();
+            TelaLogin tela = new TelaLogin();
+            tela.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Preencha os campos corretamente.");
         }
