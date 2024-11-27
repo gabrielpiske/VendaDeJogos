@@ -10,7 +10,7 @@ import model.Usuario;
 
 /**
  *
- * @author User
+ * @author gabriel_piske
  */
 public class TelaCriarUsuario extends javax.swing.JFrame {
 

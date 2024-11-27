@@ -40,7 +40,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
         setTitle("Carrinho - Venda de Jogos");
         tabelaImagem(); //formata pra suportar imageicon
         tabelaPreco(); //formata preco
-        
+
         //Carrega conteudo da tabela
         carregarJogos();
         calcularValorTotal();
@@ -108,6 +108,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
         }
 
         jtxtValorTotal.setText(String.format("R$ %.2f", valorTotal));
+
     }
 
     /**
@@ -153,6 +154,11 @@ public class TelaCarrinho extends javax.swing.JFrame {
         jblValorTotal.setText("Valor Total: ");
 
         jbtnFinalizar.setText("Finalizar Compra");
+        jbtnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnFinalizarActionPerformed(evt);
+            }
+        });
 
         jlbVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Image/setaLogin.png"))); // NOI18N
         jlbVoltar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -213,6 +219,16 @@ public class TelaCarrinho extends javax.swing.JFrame {
         TelaSistema sistema = new TelaSistema();
         sistema.setVisible(true);
     }//GEN-LAST:event_jlbVoltarMouseClicked
+
+    private void jbtnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnFinalizarActionPerformed
+        dispose();
+
+        String valorTexto = jtxtValorTotal.getText().replace("R$", "").trim().replace(",", ".");
+        double valorTotal = Double.parseDouble(valorTexto);
+
+        TelaFinalizarCompra finalizarCompra = new TelaFinalizarCompra(valorTotal);
+        finalizarCompra.setVisible(true);
+    }//GEN-LAST:event_jbtnFinalizarActionPerformed
 
     /**
      * @param args the command line arguments
