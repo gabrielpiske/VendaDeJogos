@@ -1,5 +1,6 @@
 package dao;
 
+import connection.ConexaoBanco;
 import model.Jogo;
 import java.sql.*;
 import java.util.ArrayList;
