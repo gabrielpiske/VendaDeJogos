@@ -89,6 +89,7 @@ public class TelaCarrinho extends javax.swing.JFrame {
     private void carregarJogos() {
         DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
         model.setRowCount(0);
+        jtblJogos.setDefaultEditor(Object.class, null);
 
         CarrinhoDao carrinhoDao = new CarrinhoDao();
         carrinhoDao.listJogosCarrinho(model, TelaSistema.idUsuario);

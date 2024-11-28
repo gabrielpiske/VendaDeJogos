@@ -87,6 +87,7 @@ public class TelaSistema extends javax.swing.JFrame {
     private void carregarJogos() {
         DefaultTableModel model = (DefaultTableModel) jtblJogos.getModel();
         model.setRowCount(0);
+        jtblJogos.setDefaultEditor(Object.class, null);
 
         JogoDao jogoDao = new JogoDao();
         jogoDao.listJogos(model);

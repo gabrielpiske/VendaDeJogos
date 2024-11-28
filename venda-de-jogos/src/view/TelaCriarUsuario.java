@@ -52,7 +52,7 @@ public class TelaCriarUsuario extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("JetBrains Mono", 0, 18)); // NOI18N
         jLabel3.setText("Senha");
 
-        jbtnSalvarLogar.setText("Salvar e Logar");
+        jbtnSalvarLogar.setText("Salvar");
         jbtnSalvarLogar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnSalvarLogarActionPerformed(evt);
