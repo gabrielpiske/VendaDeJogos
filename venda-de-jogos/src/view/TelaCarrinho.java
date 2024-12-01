@@ -1,24 +1,19 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+    Parte lógica da tela do carrinho, com as funções de configuração dos botões,
+    recebimento correto dos dados, configurações das tabelas e calculo do valor total
  */
 package view;
 
 import dao.CarrinhoDao;
-import dao.JogoDao;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import view.TelaSistema;
-import model.Jogo;
 
 /**
  *
@@ -29,8 +24,6 @@ public class TelaCarrinho extends javax.swing.JFrame {
     /**
      * Creates new form TelaCarrinho
      */
-    private List<Jogo> carrinho;
-    TelaSistema telaSistema;
 
     public TelaCarrinho() {
         initComponents();

@@ -1,6 +1,9 @@
+/*
+    Classe model do carrinho com seus atributos próprios
+ */
+
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

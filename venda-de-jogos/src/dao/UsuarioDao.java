@@ -1,3 +1,7 @@
+/*
+    Classe que realiza a manipulação e acesso da classe usuário
+ */
+
 package dao;
 
 import connection.ConexaoBanco;

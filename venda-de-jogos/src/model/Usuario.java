@@ -1,3 +1,7 @@
+/*
+    Classe model do usuario com seus atributos próprios
+ */
+
 package model;
 
 import java.util.Date;

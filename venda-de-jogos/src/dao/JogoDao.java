@@ -1,10 +1,12 @@
+/*
+    Classe que realiza o acesso e manipulação dos dados da classe jogo 
+ */
+
 package dao;
 
 import connection.ConexaoBanco;
 import model.Jogo;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

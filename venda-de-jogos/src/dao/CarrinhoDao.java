@@ -1,16 +1,15 @@
+/*
+    Classe que realiza o acesso de manipulação dos dados da classe carrinho
+ */
+
 package dao;
 
 import connection.ConexaoBanco;
 import java.sql.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Carrinho;
-import model.Jogo;
 
 /**
  *

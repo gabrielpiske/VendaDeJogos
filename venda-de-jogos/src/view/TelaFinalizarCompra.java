@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+    Tela que o usuario acessa após finalizar a compra onde consegue escolher qual opção de pagamento prefere
+    onde dependendo da escolha ira redirecionar para telas diferentes.
+    Independente da escolha da opção de pagamento o valor total e o carrinho serão zerados.
  */
 package view;
 

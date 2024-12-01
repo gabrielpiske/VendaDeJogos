@@ -65,11 +65,8 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="55" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtClassificacao" max="32767" attributes="0"/>
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtClassificacao" pref="183" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>

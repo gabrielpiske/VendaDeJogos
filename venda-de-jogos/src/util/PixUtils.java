@@ -1,3 +1,8 @@
+/*
+    Classe que faz o gerenciamento e criação da imagem com base no valor do carrinho, 
+    porém com chave pix ja definidano sistema
+ */
+
 package util;
 
 import com.google.zxing.BarcodeFormat;

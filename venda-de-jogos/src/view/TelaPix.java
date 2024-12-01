@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+    Tela que implementa a lógica feita em PixUtils e que recebe o qrcode feito com base no valor de seu carrinho
  */
 package view;
 
@@ -24,7 +23,7 @@ public class TelaPix extends javax.swing.JFrame {
 
         try {
             // Gerar o QR Code com a chave Pix e o valor (exemplo)
-            BufferedImage qrCodeImage = PixUtils.gerarPixQRCode("juliohenri.busarello@gmail.com", TelaFinalizarCompra.valor);
+            BufferedImage qrCodeImage = PixUtils.gerarPixQRCode("gabriel.piske07@gmail.com", TelaFinalizarCompra.valor);
             
             // Exibir a imagem do QR Code na label
             imagemPix.setIcon(new ImageIcon(qrCodeImage));

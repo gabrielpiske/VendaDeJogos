@@ -1,3 +1,9 @@
+/*
+    Tela principal do sistema onde praticamento toda a lógica e redirecionamento de telas é feito.
+    Nesta tela pode-se salvar algum jogo que o usuario queira, editar o mesmo e também excluir.
+    Além disso é através dessa tela que o usuário adiciona algum jogo ao carrinho e consegue fazer o acesso do mesmo.
+ */
+
 package view;
 
 import dao.CarrinhoDao;
@@ -6,8 +12,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -15,12 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import model.Jogo;
 import javax.swing.*;
@@ -28,10 +28,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.MaskFormatter;
 import model.Carrinho;
-import model.Usuario;
 import view.TelaCarrinho;
 
 /**

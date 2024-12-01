@@ -1,3 +1,7 @@
+/*
+    Classe model do jogo com seus atributos próprios
+ */
+
 package model;
 
 /**
